@@ -105,7 +105,11 @@
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>com.github.xiaomyin</groupId>
+            <artifactId>knife4j-spring-boot-starter</artifactId>
+            <version>3.0.2</version>>
+        </dependency> 
         <!-- poi -->
         <dependency>
             <groupId>org.apache.poi</groupId>
