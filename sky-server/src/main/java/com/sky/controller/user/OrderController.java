@@ -43,4 +43,19 @@ public class OrderController {
         log.info("生成预支付交易单：{}", orderPaymentVO);
         return Result.success(orderPaymentVO);
     }
+
+    @PutMapping("/repetition/{id}")
+    @ApiOperation("再来一单")
+    public Result repetition (@PathVariable Long id){
+        orderService.repetition(id);
+        return Result.success();
+    }
+
+    @GetMapping("/reminder/{id}")
+    @ApiOperation("客户催单")
+    public Result reminder(@PathVariable Long id){
+        orderService.reminder(id);
+        return Result.success();
+
+    }
 }

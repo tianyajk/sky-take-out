@@ -1,5 +1,6 @@
 package com.sky.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
@@ -161,6 +162,18 @@ public class OrderServiceImpl implements OrderService {
         webSocketServer.sendToAllClient(json);
     }
 
+    @Override
+    public void reminder(Long id) {
+         Orders orderDB=orderMapper.getById(id);
+         if(orderDB==null){
+             throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+         }
+         Map map=new HashMap();
+         map.put("type",2);
+         map.put("orderId",id);
+         map.put("content","订单号"+orderDB.getNumber());
+         webSocketServer.sendToAllClient(JSON.toJSONString(map));
+    }
 
 
 }
