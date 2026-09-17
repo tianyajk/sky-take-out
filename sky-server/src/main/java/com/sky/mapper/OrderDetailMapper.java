@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 
 @Mapper
-public class OrderDetailMapper {
+public interface OrderDetailMapper {
 
     public void insertBatch(List<OrderDetail> orderDetailList) {
     }
