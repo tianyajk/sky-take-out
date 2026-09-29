@@ -46,4 +46,6 @@ public interface DishMapper {
     List<Dish> list(Dish dish);
 
     Integer countByMap(Map map);
+
+    List<Dish> getBySetmealId(Long id);
 }

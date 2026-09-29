@@ -32,6 +32,7 @@ public class UserController {
 
     @Autowired
     private JwtProperties jwtProperties;
+
     @PostMapping("/login")
     @ApiOperation("微信登录")
     public Result<UserLoginVO>   login(@RequestBody UserLoginDTO userLoginDTO){
@@ -47,6 +48,6 @@ public class UserController {
                 .token(token)
                 .build();
         
-        return null;
+        return Result.success(userLoginVO);
     }
 }

@@ -12,15 +12,27 @@ import java.util.List;
 
 public interface SetmealService {
 
+    //新增套餐
     void saveWithDish(SetmealDTO setmealDTO);
 
-
+    //分页查询
     PageResult pageQuery(SetmealPageQueryDTO setmealPageQueryDTO);
 
+
+    //启用或停用套餐
     void startOrStop(Integer status, Long id);
 
+
+    //根据id查询菜品选项
+    List<DishItemVO> getDishItemById(Long id);
+
+    //更新套餐
     void update(SetmealDTO setmealDTO);
+
+    //删除套餐
+    void deleteBatch(List<Long> ids);
+
+    //条件查询
     List<Setmeal> list(Setmeal setmeal);
 
-    List<DishItemVO> getDishItemById(Long id);
 }
