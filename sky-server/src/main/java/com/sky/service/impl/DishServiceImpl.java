@@ -8,10 +8,12 @@ import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
+import com.sky.entity.Setmeal;
 import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealDishMapper;
+import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
 import com.sky.service.DishService;
 import com.sky.vo.DishVO;
@@ -37,17 +39,31 @@ public class DishServiceImpl implements DishService {
     @Autowired
     private SetmealDishMapper setmealDishMapper;
 
+    @Autowired
+    private SetmealMapper setmealMapper;
+
+
+    @Override
+    public PageResult pageQuery(DishPageQueryDTO dishPageQueryDTO) {
+        PageHelper.startPage(dishPageQueryDTO.getPage(),dishPageQueryDTO.getPageSize());
+        Page<DishVO> page= dishMapper.pageQuery(dishPageQueryDTO);
+        return new PageResult(page.getTotal(),page.getResult());
+    }
+
+    /**
+     * 新增菜品
+     * @param dishDTO
+     */
     @Override
     @Transactional
-    public void saveDishFlavor(DishDTO dishDTO) {
-        //向菜品表插入数据
+    public void saveWithFlavor(DishDTO dishDTO) {
         Dish dish=new Dish();
         BeanUtils.copyProperties(dishDTO,dish);
 
         dishMapper.insert(dish);
 
         Long  dishId=dish.getId();
-        //
+
         List<DishFlavor> flavors=dishDTO.getFlavors();
         if(flavors!=null&&flavors.size()>0){
             flavors.forEach(dishFlavor->{
@@ -56,15 +72,9 @@ public class DishServiceImpl implements DishService {
             });
             dishFlavorMapper.insertBatch(flavors);
         }
-
     }
 
-    @Override
-    public PageResult pageService(DishPageQueryDTO dishPageQueryDTO) {
-        PageHelper.startPage(dishPageQueryDTO.getPage(),dishPageQueryDTO.getPageSize());
-        Page<DishVO> page= dishMapper.pageQuery(dishPageQueryDTO);
-        return new PageResult(page.getTotal(),page.getResult());
-    }
+
 
     @Override
     @Transactional
@@ -82,7 +92,7 @@ public class DishServiceImpl implements DishService {
         }
 
         dishMapper.deleteByIds(ids);
-        dishFlavorMapper.deleteByIds(ids);
+        dishFlavorMapper.deleteByDishIds(ids);
 
     }
 
@@ -101,7 +111,7 @@ public class DishServiceImpl implements DishService {
         Dish dish=new Dish();
         BeanUtils.copyProperties(dishDTO,dish);
 
-        DishMapper.update(dish);
+        dishMapper.update(dish);
 
         dishFlavorMapper.deleteById(dishDTO.getId());
 
@@ -113,6 +123,15 @@ public class DishServiceImpl implements DishService {
                     });
                     dishFlavorMapper.insertBatch(flavors);
         }
+    }
+
+    @Override
+    public List<Dish> list(Long categoryId) {
+        Dish dish = Dish.builder()
+                .categoryId(categoryId)
+                .status(StatusConstant.ENABLE)
+                .build();
+        return dishMapper.list(dish);
     }
 
     @Override
@@ -139,5 +158,20 @@ public class DishServiceImpl implements DishService {
     public void startOrStop(Integer status, Long id) {
         Dish dish=dishMapper.getById(id);
         dish.setStatus(status);
+        dishMapper.update(dish);
+        if(status==StatusConstant.DISABLE){
+            List<Long>dishIds=new ArrayList<>();
+            dishIds.add(id);
+            List<Long>setmealIds=setmealDishMapper.getSetmealIdsByDishIds(dishIds);
+            if (setmealIds != null && setmealIds.size() > 0) {
+                for (Long setmealId : setmealIds) {
+                    Setmeal setmeal = Setmeal.builder()
+                            .id(setmealId)
+                            .status(StatusConstant.DISABLE)
+                            .build();
+                    setmealMapper.update(setmeal);
+                }
+            }
+        }
     }
 }

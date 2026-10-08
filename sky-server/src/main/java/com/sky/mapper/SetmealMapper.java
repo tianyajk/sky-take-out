@@ -23,6 +23,7 @@ public interface SetmealMapper {
     @AutoFill(OperationType.INSERT)
     void insert(Setmeal setmeal);
 
+
     Page<SetmealVO> pageQuery(SetmealPageQueryDTO setmealPageQueryDTO);
 
     /**
@@ -30,4 +31,9 @@ public interface SetmealMapper {
      * @param setmeal
      */
     void update(Setmeal setmeal);
+
+    List<DishItemVO> getDishItemBySetmealId(Long id);
+
+    @Select("select count(*) from setmeal where category_id=#{id}")
+    Integer countByCategoryId(Long id);
 }

@@ -31,8 +31,13 @@ public class CommonController {
     public Result<String> upload(MultipartFile file) {
         log.info("文件上传:{}",file);
         try{
+            //原始文件名
             String originalFilename = file.getOriginalFilename();
+
+            //截取原始文件名的后缀
             String extention = originalFilename.substring(originalFilename.lastIndexOf("."));
+
+            
             String objectName = UUID.randomUUID().toString()+extention;
 
             String filePath=aliOssUtil.upload(file.getBytes(),objectName);

@@ -51,5 +51,8 @@
             </if>
         </where>
     </select>
+    <select id="pageQuery" resultType="com.sky.vo.SetmealVO">
+        
+    </select>
 
 </mapper>

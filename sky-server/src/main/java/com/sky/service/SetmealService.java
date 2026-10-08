@@ -6,6 +6,7 @@ import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Setmeal;
 import com.sky.result.PageResult;
 import com.sky.vo.DishItemVO;
+import com.sky.vo.SetmealVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -35,4 +36,5 @@ public interface SetmealService {
     //条件查询
     List<Setmeal> list(Setmeal setmeal);
 
+    SetmealVO getByIdWithDish(Long id);
 }

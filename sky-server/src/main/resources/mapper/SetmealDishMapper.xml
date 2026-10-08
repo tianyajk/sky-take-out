@@ -10,11 +10,26 @@
         </foreach>
 
     </insert>
+    <delete id="deleteBySetmaleId" parameterType="java.lang.Long">
+        delete from setmeal_dish
+        <where>
+            setmeal_id=#{id}
+        </where>
+    </delete>
 
     <select id="getSetmealIdsByDishIds" resultType="java.lang.Long">
-        select setmeal_id from setmeal_dish where dish_id in
-        <foreach collection="DishIds" item="dishId" separator="," open="(" close=")">
+        select distinct setmeal_id from setmeal_dish where dish_id in
+        <foreach collection="dishIds" item="dishId" separator="," open="(" close=")">
             #{dishId}
         </foreach>
     </select>
+
+    <select id="getBySetmealId" resultType="com.sky.entity.SetmealDish" parameterType="java.lang.Long">
+        select * from setmeal_dish
+        <where>
+            setmeal_id=#{id}
+        </where>
+    </select>
+
+
 </mapper>

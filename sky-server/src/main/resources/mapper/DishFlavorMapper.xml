@@ -11,8 +11,10 @@
     </insert>
     
     <delete id="deleteByDishIds">
+        delete from dish_flavor where dish_id in
         <foreach collection="dishIds" open="(" separator="," close=")">
             #{dishId}
         </foreach>
     </delete>
+
 </mapper>

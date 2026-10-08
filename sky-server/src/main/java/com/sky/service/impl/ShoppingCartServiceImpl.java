@@ -19,7 +19,7 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class ShopingCartServiceImpl implements ShoppingCartService {
+public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Autowired
     private ShoppingCartMapper shoppingCartMapper;
 
@@ -78,7 +78,11 @@ public class ShopingCartServiceImpl implements ShoppingCartService {
     public void cleanShoppingCart() {
         Long userId= BaseContext.getCurrentId();
         shoppingCartMapper.clean(userId);
-        return null;
+    }
+
+    @Override
+    public void subShoppingCart(ShoppingCartDTO shoppingCartDTO) {
+
     }
 
 }
